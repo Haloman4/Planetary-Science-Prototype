@@ -1,0 +1,31 @@
+
+import sympy as sp
+import numpy as np
+
+R = 100000
+P_0 = 0
+rho_0 = 100
+g_0 = 1
+dr = 0.5 * R
+r1 = 0.5 * R
+B = 2 * (10**10)
+M0 = 1
+
+def planet_code(R, dr, rho_0, g_0, B, M0):
+  G = 6.67 * (10**-11)
+  V1 = (4 / 3) * sp.pi * R**3
+  V2 = (4/3)*sp.pi * (R-dr)**3
+  n = 2
+  dr = (R-dr)/n
+  V_top = V1 - V2
+  rho_top = rho_0
+  g_boundary = g_0
+  g_top = g_0
+  SA_1 = 4 * sp.pi * ((R-dr)**2)
+  M_top = V_top * rho_top
+  M1 = M0 - M_top
+  P = M_top * g_top / SA_1
+  rho_bottom = rho_0*(1+(P / B))
+  display(rho_bottom)
+planet_code(R, dr, rho_0, g_0, B, M0)
+
