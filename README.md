@@ -13,3 +13,7 @@ This prototype is significantly better than the 1st. It splits a planet into N l
 
 If you have to choose between the 2 prototypes, choose the 2nd prototype. It is much more powerful-simply put in the bulk modulus of the material, and the radius and known mass of the planet, and it will carry out the rest. There is a small bug; at small radii, there is a divide-by-zero error that makes the values go negative and makes the charts a bit odd, but otherwise the code is effective as far as things go.
 
+<img width="710" height="305" alt="Screenshot 2026-10-22 202300" src="https://github.com/user-attachments/assets/61a62e2f-4c7e-4e77-aea3-e25bd92b5988" />
+
+<img width="711" height="284" alt="Screenshot 2026-10-22 202313" src="https://github.com/user-attachments/assets/a0786dae-1134-4fcd-a11e-e9978eaffd55" />
+
