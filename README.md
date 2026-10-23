@@ -1,7 +1,6 @@
 # Planetary-Science-Prototype
-This is part of a longer-term project of mine, to build a simulation of planetary interiors. It has 2 parts, a 1st
-prototype and a 2nd prototype. The 1st prototype is a simple, 2-layer model I built to give myself an idea of what to do, 
-and the 2nd prototype is a multi-layer model that is more accurate.
+This is part of a longer-term project of mine, to build a simulation of planetary interiors since I always wanted to have a customizable, flexible calculator but everything out there was either pre-built for specific planets and non-customizable, or awkward to use or download, so this is my solution to this problem. 
+My project has 2 parts right now, a 1st prototype and a 2nd prototype. The 1st prototype is a simple, 2-layer model I built to give myself an idea of what to do, and the 2nd prototype is a multi-layer model that is more accurate.
 
 
 1st Prototype: 
