@@ -1,0 +1,174 @@
+##### MULTI-LAYER MODEL!!!
+
+#libraries
+import sympy as sp
+import numpy as np
+import matplotlib.pyplot as plt
+from sympy import Matrix
+
+# Parameters
+
+# Test Parameters: Moon
+R = 1737.5 * 1000
+N = 10
+M0 = 7.342 * (10**22)
+g0 = 1.62
+P0 = 0
+V_rho = (4/3)*np.pi*(R**3)
+rho_0 = M0 / V_rho
+B = 60 * (10**9)
+
+
+# Function goes here
+
+def planet_code(R, N, M0, g0, P0, rho_0, B):
+
+  # more parameters
+  G = 6.67 * (10**-11)
+  V_Prime = (4/3)*np.pi*R**3
+
+  # Split the planet
+  dr = R / N
+  def layers(N, R):
+    layers = np.linspace(0, R, N+1)
+    return layers
+  layers = layers(N, R)
+  print(layers)
+
+# Get 0-matrices of the volumes, layers and masses so they can be filled
+  layer_volumes = np.zeros(N)
+  layer_SA = np.zeros(N)
+  layer_masses = np.zeros(N)
+  layer_pressures = np.zeros(N+1)
+  layer_densities = np.zeros(N)
+
+  layer_pressures[-1] = P0
+  #layer_densities[-1] = rho_0
+
+  # Get volumes and surface areas
+  for i in range(N):
+    r_inner = layers[i]
+    r_outer = layers[i+1]
+
+    V_out = (r_outer)**3 * np.pi * (4/3)
+    V_in = (r_inner)**3 * np.pi * (4/3)
+    layer_volumes[i] = V_out - V_in
+    layer_SA[i] = 4 * np.pi * (r_inner**2)
+  print('layer volumes:')
+  print(layer_volumes)
+  print('layer SA:')
+  print(layer_SA)
+
+  # Get the Masses and densities and pressures(No pressure, eh?)
+
+  g_top = 1
+  M1 = M0 - (rho_0 * layer_volumes[-1]) 
+  P = M1 * g_top / layer_SA[-1]
+  rho_bottom = rho_0*(1+(P / B))
+  print(M1)
+  g_local = np.zeros(N)
+
+  enclosed_mass = M0
+
+  for m in range(N-1, -1, -1):
+
+    r_inner = layers[m]
+    
+
+
+
+
+    m1 = M0 - (rho_0 * layer_volumes[-1])
+    
+    layer_densities[m] = rho_0 * (1 + (layer_pressures[m+1]/B))
+    layer_masses[m] = layer_densities[m] * layer_volumes[m]
+
+
+    enclosed_mass = enclosed_mass - layer_masses[m]
+
+
+    if r_inner > 0:
+      g_local[m] = (G * enclosed_mass) / r_inner**2
+    else:
+      g_local[m] = 0
+  
+
+    
+
+    if r_inner > 0:
+      weight = (layer_masses[m] * g_local[m])
+      layer_pressures[m] = layer_pressures[m+1] + (weight / layer_SA[m])
+    else:
+      layer_pressures[m] = layer_pressures[m+1]
+
+
+
+
+    
+    
+
+
+
+  print('layer masses:')
+  print(layer_masses)
+  print('layer densities:')
+  print(layer_densities)
+  print('layer pressures:')
+  print(layer_pressures)
+
+  # Get the expected density and mass
+  
+  total_mass = np.sum(layer_masses)
+  total_volume = np.sum(layer_volumes)
+  total_density = total_mass / total_volume
+  print('total mass:')
+  print(total_mass)
+  print('total volume:')
+  print(total_volume)
+  print('total density:')
+  print(total_density)
+
+
+  # Sadly, needed AI for help for real, got stuck on this step
+
+  
+  layer_midpoints = (layers[:-1] + layers[1:]) / 2
+
+  # 2. Setup a clear multi-graph figure
+  fig, axs = plt.subplots(2, 2, figsize=(12, 10))
+  fig.suptitle("Planetary Internal Physics Profile", fontsize=16, fontweight='bold')
+
+  # Plot A: Layer Masses
+  axs[0, 0].plot(layer_midpoints / 1000, layer_masses, 'o-', color='blue')
+  axs[0, 0].set_title("Layer Mass Profile")
+  axs[0, 0].set_xlabel("Radius from Center (km)")
+  axs[0, 0].set_ylabel("Mass (kg)")
+  axs[0, 0].grid(True)
+
+  # Plot B: Layer Densities
+  axs[0, 1].plot(layer_midpoints / 1000, layer_densities, 's-', color='green')
+  axs[0, 1].set_title("Density Compression Curve")
+  axs[0, 1].set_xlabel("Radius from Center (km)")
+  axs[0, 1].set_ylabel("Density (kg/m³)")
+  axs[0, 1].grid(True)
+
+  # Plot C: Hydrostatic Pressure
+  # (Note: layer_pressures is size N+1, so it matches the raw 'layers' boundary vector perfectly!)
+  axs[1, 0].plot(layers / 1000, layer_pressures, '^-', color='red')
+  axs[1, 0].set_title("Hydrostatic Pressure Gradient")
+  axs[1, 0].set_xlabel("Radius from Center (km)")
+  axs[1, 0].set_ylabel("Pressure (Pa)")
+  axs[1, 0].grid(True)
+
+  # Plot D: Local Gravity g(r)
+  axs[1, 1].plot(layer_midpoints / 1000, g_local, 'd-', color='purple')
+  axs[1, 1].set_title("Internal Gravity Profile")
+  axs[1, 1].set_xlabel("Radius from Center (km)")
+  axs[1, 1].set_ylabel("Gravity g (m/s²)")
+  axs[1, 1].grid(True)
+
+  plt.tight_layout()
+  plt.show()
+
+
+planet_code(R, N, M0, g0, P0, rho_0, B)
