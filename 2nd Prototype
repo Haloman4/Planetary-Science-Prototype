@@ -1,5 +1,6 @@
 ##### MULTI-LAYER MODEL!!!
-# Mk. 3
+
+
 #libraries
 import sympy as sp
 import numpy as np
